@@ -1,25 +1,31 @@
 const hamstersURL = "https://api.pexels.com/v1/search?query=hamsters"
+
 const accessKey = "wBNjSThvryJrolU99fLje94rrKvOKuRiCSYmSgEZpN8bcE0FY5Ynu3zh"
 
 const loadButton = document.getElementById("loadButton")
-const getHamsters = function () {
-  fetch(hamstersURL, {
+const loadImages = function (searchquery) {
+  console.log("CLICCATO BOTTONE PRIMARIO")
+  fetch(hamstersURL + searchquery, {
     headers: { Authorization: `${accessKey}` },
   })
     .then((res) => {
-      console.log(res)
       if (res.ok) {
         return res.json()
       } else {
-        throw new Error("ERRORE")
+        throw new Error(res.status)
       }
     })
-    .then((promise) => {
-      const hamsterphotos = promise.photos
-      console.log(hamsterphotos)
+    .then((pexelsData) => {
+      console.log("DATI PEXELS", pexelsData)
+      //trovo tutti i cani
+      const allTheDogs = document.querySelectorAll(".card img")
+      console.log(allTheDogs)
+      for (let i = 0; i < allTheDogs.length; i++) {
+        // i=indice
+        allTheDogs[i].setAttribute("src", pexelsData.photos[i].src.tiny)
+      }
     })
     .catch((err) => {
-      console.log("ERRORE", err)
+      console.log("ERROREEEEE", err)
     })
 }
-getHamsters()
